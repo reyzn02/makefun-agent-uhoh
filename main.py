@@ -19,12 +19,28 @@ import os
 WORD = "recalculating"
 
 
+def validate(word):
+    """Check the word against the competition gate before writing it."""
+    if not isinstance(word, str):
+        raise TypeError("entry must be a string")
+    if not 1 <= len(word) <= 99:
+        raise ValueError("entry must be 1 to 99 characters")
+    if not word.strip():
+        raise ValueError("entry must not be only white space")
+    if len(word.split()) != 1:
+        raise ValueError("entry must be exactly one word")
+    word.encode("utf-8")  # must be valid UTF-8 text
+    return word
+
+
 def main():
     output_dir = "/output"
     os.makedirs(output_dir, exist_ok=True)
     path = os.path.join(output_dir, "entry.txt")
+    word = validate(WORD)
     with open(path, "w", encoding="utf-8") as f:
-        f.write(WORD)
+        f.write(word)
+    print("wrote %d characters to %s: %s" % (len(word), path, word))
 
 
 if __name__ == "__main__":
